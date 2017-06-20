@@ -1,33 +1,39 @@
 package com.example.demo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-
+import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 @Controller
-@RequestMapping(path="/home")
+
 public class LoginController {
     @Autowired
     private ATMRepository atmRepository;
 
-    @GetMapping(path="/add")
-    public @ResponseBody String addNewTransaction(@RequestParam long id)
+    @RequestMapping(path="/")
+    public String login() {
+        return "home";
+    }
+    @GetMapping(path="/")
+    public String getLogin(Model model)
             {
-                Transaction t = new Transaction();
-                t.setId(id);
-                ATMRepository.save(t);
-                return "Saved";
+                model.addAttribute(new Transaction());
+                return "home";
             }
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<Greeting> getAllUsers()
-    {
-        return greetRepository.findAll();
+    @PostMapping(path="/home")
+    public @ResponseBody String postLogin(@ModelAttribute Transaction transaction){
+        //if(transaction.getAction().equals("withdraw"))
+        String val = transaction.getAccountNum() + transaction.getAction();
+        atmRepository.save(transaction);
+        return val;
     }
+    @RequestMapping("/next")
+    public @ResponseBody String requestLogin(){
+        return atmRepository.findAll().toString();
+    }
+
+
+
 }
 

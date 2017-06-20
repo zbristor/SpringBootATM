@@ -14,20 +14,4 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ATMController {
     @Autowired
     private ATMRepository atmRepository;
-
-    @GetMapping(path="/add")
-    public @ResponseBody String addNewGreet(@RequestParam String content)
-            {
-                Greeting g = new Greeting();
-                g.setContent(content);
-                greetRepository.save(g);
-                return "Saved";
-            }
-
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<Greeting> getAllUsers()
-    {
-        return greetRepository.findAll();
-    }
 }
-
